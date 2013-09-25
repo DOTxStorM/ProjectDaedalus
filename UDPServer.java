@@ -27,25 +27,28 @@ class UDPServer {
 			System.out.println("Failed to open UDP socket");
 			System.exit(0);
 		}
-
+		/*
       byte[] receiveData = new byte[1024];
       byte[] sendData  = new byte[1024];
-
+      */
       while(true)
         {
+        	 byte[] receiveData = new byte[1024];
+        	 byte[] sendData  = new byte[1024];
 
           DatagramPacket receivePacket =
              new DatagramPacket(receiveData, receiveData.length);
-           serverSocket.receive(receivePacket);
+          serverSocket.receive(receivePacket);
           String sentence = new String(receivePacket.getData());
 
           InetAddress IPAddress = receivePacket.getAddress();
 
           int port = receivePacket.getPort();
 
-          String capitalizedSentence = sentence.toUpperCase();
+          System.out.println(IPAddress.toString() + ": " + sentence);
+          String returnToClient = "You sent: " + sentence;
 
-          sendData = capitalizedSentence.getBytes();
+          sendData = returnToClient.getBytes();
 
           DatagramPacket sendPacket =
              new DatagramPacket(sendData, sendData.length, IPAddress,
