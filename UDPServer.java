@@ -36,6 +36,7 @@ class UDPServer {
 							waitingRoom[i] = new player(IPAddress, i+1);
 						} else{
 							System.out.println("There already exists a player with that IP address.");
+							//then exit the program
 						}
 					}
 				}
@@ -65,6 +66,10 @@ class UDPServer {
 		
 		
 		listOfPlayers = makePlayerRoom(Integer.valueOf(inFromUser.readLine()), serverSocket);
+		System.out.println("GAME ROOM HAS BEEN MADE");
+		for(player p : listOfPlayers){
+			System.out.println("[ " + p.m_playerID + " ] " + p.m_IPAddress + '\n');
+		}
       while(true)
         {
         	 byte[] receiveData = new byte[1024];
