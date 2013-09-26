@@ -30,11 +30,13 @@ class UDPClient {
       clientSocket.send(new DatagramPacket(sendData, sendData.length, IPAddress, 9876));//for when the player enters the room for the first time
       //wait to receive the okay to go packet
       
-      
+      while(true){
       
       System.out.printf(">: ");
       String sentence = inFromUser.readLine();
       sentence = sentence.toUpperCase();
+      if(sentence.equals("EXIT"))
+      	      break;
       sendData = sentence.getBytes();
 	  DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, IPAddress, 9876);
 	  
@@ -48,6 +50,7 @@ class UDPClient {
       String modifiedSentence = new String(receivePacket.getData());
 
       System.out.println(modifiedSentence);
+      }
       clientSocket.close();
       }
 }

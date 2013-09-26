@@ -74,6 +74,7 @@ class UDPServer {
         {
         	 byte[] receiveData = new byte[1024];
         	 byte[] sendData  = new byte[1024];
+        	 String[] commands;
 
           DatagramPacket receivePacket =
              new DatagramPacket(receiveData, receiveData.length);
@@ -86,6 +87,10 @@ class UDPServer {
           int port = receivePacket.getPort();
 
           System.out.println(IPAddress.toString() + ": " + sentence);
+          commands = stringParse.stringParse(sentence);
+          for(String s : commands){
+          	System.out.println(s);  
+          }
           String returnToClient = "You sent: " + sentence;
 
           sendData = returnToClient.getBytes();
