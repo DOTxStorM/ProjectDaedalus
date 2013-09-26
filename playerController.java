@@ -1,7 +1,5 @@
 class playerController{
-	public static void main(String argv[]){
-		
-	}
+	
 	
 	public String runCommands(String[] input){
 		String toReturn = null;

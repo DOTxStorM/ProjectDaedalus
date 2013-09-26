@@ -12,8 +12,41 @@ import java.io.*;
 import java.net.*;
 
 class UDPServer {
+	
+	public static player[] makePlayerRoom(int numPlayers, DatagramSocket serverSocket){
+		player[] waitingRoom = new player[numPlayers];
+		System.out.println("Making a room for " + numPlayers + " players.");
+		for(int i = 0; i < numPlayers; ++i){
+				byte[] receiveData = new byte[1024];
+				byte[] sendData = new byte[1024];
+				
+				DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+				try{
+					serverSocket.receive(receivePacket);
+				} catch(IOException e){
+					System.out.println("caught IOException");
+				}
+				InetAddress IPAddress = receivePacket.getAddress();
+				System.out.println(IPAddress);
+				if(i == 0){
+					waitingRoom[i] = new player(IPAddress, i+1);
+				} else{
+					for(player p : waitingRoom){
+						if(p.m_IPAddress != IPAddress){
+							waitingRoom[i] = new player(IPAddress, i+1);
+						} else{
+							System.out.println("There already exists a player with that IP address.");
+						}
+					}
+				}
+				System.out.println("Made player with ID " + waitingRoom[i].m_playerID + " and with IP address " + waitingRoom[i].m_IPAddress);
+		}
+		return waitingRoom;
+	}
+	
   public static void main(String args[]) throws Exception
     {
+    	    player[] listOfPlayers = new player[4];
 
     DatagramSocket serverSocket = null;
 	  
@@ -27,10 +60,11 @@ class UDPServer {
 			System.out.println("Failed to open UDP socket");
 			System.exit(0);
 		}
-		/*
-      byte[] receiveData = new byte[1024];
-      byte[] sendData  = new byte[1024];
-      */
+		BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
+		System.out.printf(">: Enter the amount of players this room will hold (2 - 4): ");
+		
+		
+		listOfPlayers = makePlayerRoom(Integer.valueOf(inFromUser.readLine()), serverSocket);
       while(true)
         {
         	 byte[] receiveData = new byte[1024];
@@ -42,6 +76,7 @@ class UDPServer {
           String sentence = new String(receivePacket.getData());
 
           InetAddress IPAddress = receivePacket.getAddress();
+          
 
           int port = receivePacket.getPort();
 
